@@ -1,0 +1,34 @@
+# Node dependencies
+node_modules/
+.env
+dist/
+build/
+coverage/
+
+# Firebase credentials
+backend/serviceAccountKey.json
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.log
+
+# Model and data
+model.pkl
+training_data.json
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# ngrok (if config is used)
+.ngrok*
