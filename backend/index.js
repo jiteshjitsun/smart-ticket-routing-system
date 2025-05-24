@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const admin = require("firebase-admin");
+const predictTeam = require("./predictTeam");
 
 const app = express();
 app.use(cors());
@@ -37,6 +38,8 @@ app.post("/jira-webhook", express.json(), async (req, res) => {
     };
 
     console.log("🎫 New Ticket:", ticketData);
+    const team = await predictTeam(ticketData);
+    console.log("Predicted team:", team);
 
     res.status(200).json({ message: "Ticket received" });
   } catch (err) {
