@@ -4,6 +4,7 @@ const cors = require("cors");
 const admin = require("firebase-admin");
 const predictTeam = require("./predictTeam");
 const saveToFirestore = require("./firestore");
+const { updateJiraTicketWithTeam } = require("./jiraServices");
 
 const app = express();
 app.use(cors({
@@ -66,6 +67,9 @@ app.post("/jira-webhook", express.json(), async (req, res) => {
     console.log("🎫 New Ticket:", ticketData);
     const team = await predictTeam(ticketData);
     await saveToFirestore(ticketData, team);
+
+    const issueKey = issue.key;
+    await updateJiraTicketWithTeam(issueKey, team);
     console.log("Predicted team:", team);
 
     res.status(200).json({ message: "Ticket received" });
