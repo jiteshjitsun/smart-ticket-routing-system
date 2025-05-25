@@ -1,13 +1,5 @@
-const admin = require("firebase-admin");
-const serviceAccount = require("./serviceAccountKey.json");
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-}
-
-const db = admin.firestore();
+const db = require("./firebase.js");
 
 /**
  * Save ticket info to Firestore
@@ -19,7 +11,7 @@ async function saveToFirestore(ticketData, team) {
     summary: ticketData.summary,
     description: ticketData.description,
     predictedTeam: team,
-    createdAt: new Date(),
+    createdAt: admin.firestore.FieldValue.serverTimestamp(),
   };
 
   await db.collection("tickets").add(doc);
