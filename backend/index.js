@@ -3,14 +3,15 @@ const express = require("express");
 const cors = require("cors");
 const admin = require("firebase-admin");
 const predictTeam = require("./predictTeam");
+const saveToFirestore = require("./firestore");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 console.log("🚀 Server ready at http://localhost:3000");
-admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
-});
+// admin.initializeApp({
+//   credential: admin.credential.applicationDefault(),
+// });
 
 const db = admin.firestore();
 
@@ -39,6 +40,7 @@ app.post("/jira-webhook", express.json(), async (req, res) => {
 
     console.log("🎫 New Ticket:", ticketData);
     const team = await predictTeam(ticketData);
+    await saveToFirestore(ticketData, team);
     console.log("Predicted team:", team);
 
     res.status(200).json({ message: "Ticket received" });
